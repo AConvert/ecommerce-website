@@ -3,8 +3,8 @@ import { Link, Outlet } from "react-router-dom";
 
 function Banner() {
   return (
-    <main className="h-screen max-w-screen-2xl">
-      <section className="flex items-center justify-center pt-20">
+    <main className="h-screen max-w-screen-2xl pb-20">
+      <section className="flex items-center justify-center space-x-10 pt-10">
         <div className="flex-col space-y-8 pb-36 pl-20">
           <div>
             <h1 className="font-bold text-6xl text-white">Order a Tasty and</h1>
@@ -26,10 +26,13 @@ function Banner() {
             <Outlet />
           </div>
         </div>
-        {/* 
+
         <div>
-          <img src="../image/salad_1.png" className="w-[700px] h-[500px] " />
-        </div> */}
+          <img
+            src="../image/takeway_food_ill.png"
+            className="w-[600px] h-[500px] "
+          />
+        </div>
       </section>
     </main>
   );
