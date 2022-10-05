@@ -7,6 +7,7 @@ import schemaTypes from "all:part:@sanity/base/schema-type";
 import deals from "./deals";
 import dishes from "./dishes";
 import category from "./category";
+import popular from "./popular";
 
 // Then we give our schema to the builder and provide the result to Sanity
 export default createSchema({
@@ -20,5 +21,6 @@ export default createSchema({
     dishes,
     deals,
     category,
+    popular,
   ]),
 });

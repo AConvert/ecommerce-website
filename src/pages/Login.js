@@ -122,11 +122,11 @@ function Login() {
         ref={modalRef}
         className={
           showSignIn
-            ? "absolute z-20 top-[40%] left-[40%] bg-white p-8 shadow-md shadow-gray-400"
+            ? "absolute z-20 top-[40%] left-[50%] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-8 shadow-md shadow-gray-400"
             : "hidden"
         }
       >
-        <div className="flex-col items-center space-y-6">
+        <div className="flex flex-col items-center  space-y-6">
           <h1 className="text-3xl text-center font-semibold">Sign In</h1>
           <div className="border-b-gray-900 border-b">
             <input
@@ -150,7 +150,7 @@ function Login() {
             <Link
               to={!user && "/"}
               onClick={handleSignIn}
-              className="bg-red-500 py-3 px-28 flex-1 cursor-pointer hover:bg-red-700 rounded-xl text-center text-white  border border-white"
+              className="bg-red-500 py-3 px-12 xl:px-28 flex-1 cursor-pointer hover:bg-red-700 rounded-xl text-center text-white  border border-white"
             >
               Sign In
             </Link>
@@ -158,25 +158,30 @@ function Login() {
         </div>
       </div>
 
-      <main className="w-screen h-full bg-gray-900 relative">
-        <section className="px-20 py-16">
-          <div className="flex justify-around">
+      <main className="w-screen h-full md:h-screen lg:h-screen xl:h-full bg-gray-900 relative">
+        <section className=" xl:px-20 xl:py-16">
+          <div className="flex flex-col items-center pb-10 xl:flex-row xl:justify-around ">
+            <img
+              src="/image/logo_1.png"
+              alt="login_logo"
+              className="w-48 h-48 mt-6 md:hidden"
+            />
             <img
               src="../image/login.jpg"
-              className=" w-1/2 object-cover h-screen rounded-tl-3xl rounded-bl-3xl"
+              className="hidden md:w-[600px] md:h-[460px] md:block md:pt-16 xl:w-1/2 object-cover xl:h-screen"
               loading="lazy"
             />
-            <div className="">
-              <div className="flex-col space-y-6 py-24">
-                <h1 className="text-white pb-2 pt-12 text-4xl font-semibold text-center">
+            <div className="flex flex-col items-center">
+              <div className="flex-col space-y-6 w-full xl:py-24">
+                <h1 className="text-white pb-1 pt-6 md:pt-12 md:text-4xl text-3xl xl:pb-2 xl:pt-12 xl:text-4xl font-semibold text-center">
                   Sign Up
                 </h1>
-                <div className="flex-col space-y-8">
+                <div className="flex flex-col items-center flex-1 space-y-8">
                   <div>
                     <input
                       placeholder="Email"
                       value={signUpEmail}
-                      className="pl-2 pr-10 py-3 rounded-md focus:outline-none"
+                      className="pl-2 w-full py-3 rounded-md focus:outline-none"
                       type="Email"
                       onChange={(e) => setSignUpEmail(e.target.value)}
                     />
@@ -185,7 +190,7 @@ function Login() {
                     <input
                       placeholder="Password"
                       value={signUpPassword}
-                      className="pl-2 pr-10 py-3  rounded-md  focus:outline-none"
+                      className="pl-2 w-full py-3  rounded-md  focus:outline-none"
                       type="Password"
                       onChange={(e) => setSignUpPassword(e.target.value)}
                     />
@@ -193,7 +198,7 @@ function Login() {
 
                   <div className="pt-4">
                     <Link
-                      className="bg-red-500 py-3 px-24 flex-1 cursor-pointer hover:bg-red-700 rounded-xl text-center text-white  border border-white"
+                      className="bg-red-500 py-3 pl-[74px] pr-[74px]  cursor-pointer hover:bg-red-700 rounded-xl text-center text-white  border border-white"
                       onClick={handleSignUp}
                       to={!user && "/"}
                     >

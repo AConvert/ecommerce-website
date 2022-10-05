@@ -1,17 +1,18 @@
 export default {
-  name: "deals",
-  title: "Deals",
+  name: "popular",
+  title: "Popular",
   type: "document",
   fields: [
     {
-      name: "deal",
-      title: "Name of deal",
+      name: "title",
+      title: "Title",
       type: "string",
     },
+
     {
       name: "description",
-      title: "Short description",
-      type: "string",
+      title: "Description",
+      type: "text",
     },
     {
       name: "image",

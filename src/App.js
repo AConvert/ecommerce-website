@@ -2,6 +2,9 @@ import Homepage from "./pages/Homepage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Menupage from "./pages/Menupage";
 import Login from "./pages/Login";
+import Pizza from "./pages/Pizza";
+import Burger from "./pages/Burger";
+import Salad from "./pages/Salad";
 
 function App() {
   return (
@@ -11,6 +14,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Homepage />} />
           <Route path="/menu" element={<Menupage />} />
+          <Route path="/pizza" element={<Pizza />} />
+          <Route path="/burger" element={<Burger />} />
+          <Route path="/salad" element={<Salad />} />
           <Route
             path="*"
             element={
