@@ -1,11 +1,45 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import MenuHeader from "../components/MenuHeader";
 import PopularCard from "../components/PopularCard";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { useSelector } from "react-redux";
+import { selectBasketItems, selectBasketTotal } from "../features/basketSlice";
+import CurrencyFormat from "react-currency-format";
 
 function FoodComponent({ title, data }) {
+  const itemsBasket = useSelector(selectBasketItems);
+  const totalBasketSum = useSelector(selectBasketTotal);
   return (
     <main className="h-full w-full">
       <MenuHeader />
+      {itemsBasket.length > 0 ? (
+        <div className="w-screen">
+          <div className="fixed -translate-x-1/2 -translate-y-1/2 bottom-0 left-1/2 z-20">
+            <Link to={"/basket"}>
+              <button className="font-bold text-md md:text-2xl bg-red-500 py-4 md:py-6 text-white w-72 md:w-[500px] rounded-lg">
+                View Basket
+                <span className="text-md md:text-2xl ml-2 xl:ml-4 font-bold text-white">
+                  <CurrencyFormat
+                    value={totalBasketSum}
+                    displayType={"text"}
+                    prefix={"£"}
+                    decimalScale={2}
+                  />
+                </span>
+              </button>
+            </Link>
+          </div>
+        </div>
+      ) : null}
+      <div>
+        <Link
+          to={"/menu"}
+          className="rounded-full bg-gray-700 text-white hover:bg-white hover:text-black  p-1 lg:p-2 absolute top-0 left-0 m-3"
+        >
+          <KeyboardBackspaceIcon className="h-4 w-4 lg:h-6 lg:w-6" />
+        </Link>
+      </div>
       <section className="">
         <div className="flex flex-col space-y-6 mt-6 w-screen">
           <h1 className="text-white font-bold text-2xl ml-6">{title}</h1>

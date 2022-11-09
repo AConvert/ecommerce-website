@@ -26,6 +26,9 @@ function Pizza() {
       )
       .then((data) => {
         dispatch(addPizzas(data.dishes));
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, [dispatch]);
 

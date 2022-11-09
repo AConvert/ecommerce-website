@@ -23,6 +23,9 @@ function PopularPage() {
       )
       .then((data) => {
         dispatch(addPopularDish(data));
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, [dispatch]);
 

@@ -1,11 +1,12 @@
 import React from "react";
+
 import Banner from "../components/Banner";
 import Feed from "../components/Feed";
 import Header from "../components/Header";
 
 function Homepage() {
   return (
-    <div className="pb-24 h-full w-screen">
+    <div className="pb-24 h-full w-screen relative">
       <Header />
       <Banner />
       <div className="flex py-20 items-center justify-center space-x-8 md:space-x-12 xl:space-x-14">

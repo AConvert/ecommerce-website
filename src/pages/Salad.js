@@ -26,7 +26,9 @@ function Salad() {
       )
       .then((data) => {
         dispatch(listsalads(data.dishes));
-        console.log(data.dishes);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, [dispatch]);
 

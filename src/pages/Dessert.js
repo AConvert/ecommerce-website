@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import FoodComponent from "../components/FoodComponent";
+import { listDessert, selectDessert } from "../features/dessertSlice";
 import client from "../sanity";
 
-function Burger() {
-  const [burger, setBurger] = useState([]);
+function Dessert() {
+  const dispatch = useDispatch();
+  const desserts = useSelector(selectDessert);
 
   useEffect(() => {
     client
       .fetch(
-        `*[_type == 'category' && name =='Burger'][0]{
+        `*[_type == 'category' && name =='Dessert'][0]{
       'dishes': *[_type == 'dishes' && ^._id in category[]._ref]{
       ...,
       image{
@@ -20,7 +23,7 @@ function Burger() {
       }`
       )
       .then((data) => {
-        setBurger(data.dishes);
+        dispatch(listDessert(data.dishes));
       })
       .catch((error) => {
         console.log(error);
@@ -29,9 +32,9 @@ function Burger() {
 
   return (
     <div>
-      <FoodComponent title={burger.name} data={burger} />
+      <FoodComponent title={desserts.name} data={desserts} />
     </div>
   );
 }
 
-export default Burger;
+export default Dessert;
