@@ -75,14 +75,14 @@ function MenuHeader() {
   }, []);
 
   return (
-    <main className="w-screen">
+    <main className="w-screen p-2">
       <section className="flex items-center justify-center md:justify-between px-14 xl:px-20 py-3 border-b border-b-gray-200 border-opacity-40">
         <img
           src="../image/logo_1.png"
           loading="lazy"
           className="hidden lg:block lg:w-32 lg:h-32"
         />
-        <div className="flex items-center justify-center space-x-5 xl:space-x-8 relative">
+        <div className="flex items-center space-x-2 xl:space-x-8 relative">
           <div className="text-white text-sm lg:text-xl flex-col items-center flex space-y-1">
             Delivering to{" "}
             <div className="flex items-center space-x-1">

@@ -11,11 +11,11 @@ function FoodComponent({ title, data }) {
   const itemsBasket = useSelector(selectBasketItems);
   const totalBasketSum = useSelector(selectBasketTotal);
   return (
-    <main className="h-full w-full">
+    <main className="h-full w-full pb-20">
       <MenuHeader />
       {itemsBasket.length > 0 ? (
         <div className="w-screen">
-          <div className="fixed -translate-x-1/2 -translate-y-1/2 bottom-0 left-1/2 z-20">
+          <div className="fixed -translate-x-1/2 -translate-y-1/2 bottom-6 left-1/2 z-20">
             <Link to={"/basket"}>
               <button className="font-bold text-md md:text-2xl bg-red-500 py-4 md:py-6 text-white w-72 md:w-[500px] rounded-lg">
                 View Basket
