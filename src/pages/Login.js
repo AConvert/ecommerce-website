@@ -27,9 +27,9 @@ function Login() {
           updateDoc(doc(db, "users", user.uid), {
             timestamp: serverTimestamp(),
           });
-          navigate("/");
         }
       };
+      navigate("/");
     }
   }, [user, navigate]);
 
