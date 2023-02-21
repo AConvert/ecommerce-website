@@ -12,14 +12,19 @@ import Grill from "./pages/Grill";
 import Basket from "./pages/Basket";
 import SuccessOrder from "./pages/SuccessOrder";
 import TrackOrderPage from "./pages/TrackOrderPage";
+import { useSelector } from "react-redux";
+import { selectUser } from "./features/userSlice";
+import SignUp from "./pages/SignUp";
 
 function App() {
+  const user = useSelector(selectUser);
   return (
     <div className="font-Poppins bg-gray-900">
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
           <Route path="/" element={<Homepage />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/menu" element={<Menupage />} />
           <Route path="/pizza" element={<Pizza />} />
           <Route path="/burger" element={<Burger />} />

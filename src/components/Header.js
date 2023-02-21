@@ -5,18 +5,7 @@ import { useDispatch } from "react-redux";
 import { logoutUser } from "../features/userSlice";
 
 function Header() {
-  const [signedIn, setSignedIn] = useState(false);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    auth.onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setSignedIn(!signedIn);
-      } else {
-        setSignedIn(false);
-      }
-    });
-  }, []);
 
   const handleLogOut = () => {
     auth.signOut(() => {
@@ -36,15 +25,9 @@ function Header() {
           />
           <div className="flex space-x-2 xl:space-x-5 items-center">
             <Link
-              to={signedIn ? "/login" : "/"}
-              className="bg-green-600 text-white rounded-lg p-2 text-sm md:text-lg lg:text-2xl xl:p-4 xl:text-lg"
-            >
-              Sign Up
-            </Link>
-            <Link
               to={"/login"}
               onClick={handleLogOut}
-              className=" text-white rounded-lg p-2 text-sm md:text-lg lg:text-2xl xl:p-4 xl:text-lg"
+              className=" text-white bg-green-600 rounded-lg p-2 text-sm md:text-lg lg:text-2xl xl:p-4 xl:text-lg"
             >
               Log Out
             </Link>

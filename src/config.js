@@ -1,22 +1,18 @@
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-import "firebase/compat/firestore";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyACJUXIE5iS0rSSi1N0Ltyufp6N1yxl0gk",
-  authDomain: "ecommerce-website-54d13.firebaseapp.com",
-  projectId: "ecommerce-website-54d13",
-  storageBucket: "ecommerce-website-54d13.appspot.com",
-  messagingSenderId: "391744396434",
-  appId: "1:391744396434:web:71af71dbd0d198e6749a4b",
+  apiKey: "AIzaSyCvkJCwk8dloYI1H0XaVe_gckyWeGE1bdA",
+  authDomain: "food-ecommerce-b4048.firebaseapp.com",
+  projectId: "food-ecommerce-b4048",
+  storageBucket: "food-ecommerce-b4048.appspot.com",
+  messagingSenderId: "259470594038",
+  appId: "1:259470594038:web:d57cf2431df14fd49381d7",
 };
 
-const app = firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore(app);
-const googleProvider = new firebase.auth.GoogleAuthProvider();
-googleProvider.setCustomParameters({ prompt: "select_account" });
-const facebookProvider = new firebase.auth.FacebookAuthProvider();
-facebookProvider.setCustomParameters({ prompt: "select_account" });
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-export { auth, app, db, googleProvider, facebookProvider };
+export { auth, db };

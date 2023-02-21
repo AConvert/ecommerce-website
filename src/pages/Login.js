@@ -1,259 +1,139 @@
-import React, { useEffect, useRef, useState } from "react";
-import { auth, googleProvider, facebookProvider, db } from "../config";
-import { Link, Outlet } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUser, selectUser } from "../features/userSlice";
+import React, { useEffect, useState } from "react";
+import GoogleIcon from "@mui/icons-material/Google";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth, db } from "../config";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 
 function Login() {
-  const [signUpEmail, setSignUpEmail] = useState("");
-  const [signUpPassword, setSignUpPassword] = useState("");
-  const [signInEmail, setSignInEmail] = useState("");
-  const [signInPassword, setSignInPassword] = useState("");
-  const [showSignIn, setShowSignIn] = useState(false);
-  const [loggedUser, setLoggedUser] = useState([]);
-  const [newUser, setNewUser] = useState([]);
-  const [error, setError] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [authError, setAuthError] = useState(false);
 
-  const dispatch = useDispatch();
-  const user = useSelector(selectUser);
+  const [user] = useAuthState(auth);
+  const navigate = useNavigate();
 
-  const modalRef = useRef();
-  useOnClickOutside(modalRef, () => setShowSignIn(false));
-
-  const handleSignUp = () => {
-    auth
-      .createUserWithEmailAndPassword(signUpEmail, signUpPassword)
-      .then((data) => {
-        setNewUser(data);
-      })
-      .catch((error) => {
-        let errorCode = error.code;
-        let errorMessage = error.message;
-        {
-          errorCode && setError("User details cannot be found");
+  useEffect(() => {
+    if (user) {
+      const checkUserData = async () => {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          updateDoc(doc(db, "users", user.uid), {
+            timestamp: serverTimestamp(),
+          });
+          navigate("/");
         }
-        return;
-      });
-  };
-
-  const handleSignIn = () => {
-    if (!signInEmail) {
-      alert("Please insert your email");
-    } else {
-      auth
-        .signInWithEmailAndPassword(signInEmail, signInPassword)
-        .then((data) => {
-          if (data) {
-            setLoggedUser(data);
-          }
-        })
-
-        .catch((error) => {
-          let errorCode = error.code;
-          let errorMessage = error.message;
-
-          {
-            errorCode && setError("User details cannot be found");
-          }
-          return;
-        });
+      };
     }
-  };
+  }, [user, navigate]);
 
-  function useOnClickOutside(modalRef, handler) {
-    useEffect(() => {
-      const listener = (event) => {
-        if (!modalRef.current || modalRef.current.contains(event.target)) {
-          return;
-        }
-        handler(event);
-      };
-      document.addEventListener("mousedown", listener);
-      document.addEventListener("touchstart", listener);
-      return () => {
-        document.removeEventListener("mousedown", listener);
-        document.removeEventListener("touchstart", listener);
-      };
-    }, [modalRef, handler]);
-  }
-
-  const signInGoogle = () => {
-    auth
-      .signInWithPopup(googleProvider)
-      .then((result) => {
-        var user = result.user;
-        dispatch(loginUser(user));
+  const handleLogIn = () => {
+    signInWithEmailAndPassword(auth, userEmail, userPassword)
+      .then((userCredential) => {
+        const user = userCredential.user;
       })
       .catch((error) => {
-        let errorMessage = error.message;
-        {
-          error && alert(errorMessage);
+        if (error) {
+          console.log(error.message);
+          setAuthError(!authError);
         }
-        return;
       });
+    setUserEmail("");
+    setUserPassword("");
   };
 
-  const signInFacebook = () => {
-    auth
-      .signInWithPopup(facebookProvider)
+  const signInGoogle = async () => {
+    await signInWithPopup(auth, new GoogleAuthProvider())
       .then((result) => {
-        var user = result.user;
-        dispatch(loginUser(user));
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const user = result.user;
+        console.log(credential);
+        console.log(user);
       })
       .catch((error) => {
-        let errorMessage = error.message;
-        {
-          error && alert(errorMessage);
-        }
-        return;
+        const errorMessage = error.message;
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        setAuthError(!authError);
+        alert(credential);
+        alert(errorMessage);
       });
   };
 
   return (
-    <>
-      <div
-        ref={modalRef}
-        className={
-          showSignIn
-            ? "absolute z-20 top-[40%] lg:top-[50%] xl:top-[60%] left-[50%] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-6 shadow-md shadow-gray-400"
-            : "hidden"
-        }
-      >
-        <div className="flex flex-col items-center  space-y-6">
-          <h1 className="text-3xl text-center font-semibold">Sign In</h1>
-          {error && (
-            <div>
-              <h1 className="text-white rounded-lg bg-red-500 p-2">{error}</h1>
-            </div>
-          )}
-          <div className="border-b-gray-900 border-b">
+    <main className="text-white md:flex md:justify-center md:items-center bg-gray-900 md:bg-gray-700 w-screen h-screen md:h-full pb-24 px-6 xl:px-80">
+      <section className="md:w-full lg:h-full lg:pb-44 xl:pb-10 bg-gray-900 space-y-8 xl:space-y-2 md:border-2 md:m-24 lg:m-44 xl:m-8 md:rounded-xl border-gray-400 border-opacity-80">
+        <div className="grid place-items-center pt-6">
+          <img
+            src="/image/logo_1.png"
+            className="w-36 h-36 md:w-44 md:h-44 xl:w-24 xl:h-24 "
+            loading="lazy"
+            alt="signup_logo"
+          />
+        </div>
+        <div className="flex flex-col md:p-24 xl:py-2 xl:px-44 xl:h-screen-md mx-3 xl:mx-1 space-y-5 relative xl:py-4">
+          <div className="grid place-items-center ">
+            <button
+              onClick={signInGoogle}
+              className="border bg-green-600  w-full py-3 cursor-pointer focus:bg-green-700  rounded-xl"
+            >
+              <GoogleIcon
+                sx={{ height: 32, width: 32 }}
+                className="w-6 h-6  text-white "
+              />
+            </button>
+          </div>
+          <div className="w-full flex flex-col space-y-6 ">
+            {authError ? (
+              <div>
+                <h1 className=" w-full rounded-lg text-red-500 bg-white p-3 text-sm text-center absolute z-2 top-0 left-0">
+                  Your credentials are invalid...
+                </h1>
+              </div>
+            ) : null}
             <input
-              className="pl-2 pr-10 py-3 rounded-md focus:outline-none "
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
               type="email"
-              value={signInEmail}
-              required={true}
-              onChange={(e) => setSignInEmail(e.target.value)}
+              className="border bg-white text-sm pl-4 xl:py-4 focus:border-red-600 focus:border-2 outline-none  text-black w-full py-5 cursor-pointer  rounded-xl"
+              required
               placeholder="Email"
             />
-          </div>
-          <div className="border-b-gray-900 border-b">
             <input
-              className="pl-2 pr-10 py-3 rounded-md focus:outline-none"
+              value={userPassword}
+              onChange={(e) => setUserPassword(e.target.value)}
               type="password"
-              value={signInPassword}
-              required={true}
-              onChange={(e) => setSignInPassword(e.target.value)}
+              className="border bg-white text-sm pl-4 xl:py-4 focus:border-red-600 focus:border-2 outline-none  text-black w-full py-5 cursor-pointer  rounded-xl"
+              required
               placeholder="Password"
             />
-          </div>
-          <div className="pt-4">
-            <Link
-              to={
-                !signInPassword || !signInEmail || !loggedUser ? "/login" : "/"
-              }
-              onClick={handleSignIn}
-              className="bg-red-500 py-3 px-12 xl:px-28 flex-1 cursor-pointer hover:bg-red-700 rounded-xl text-center text-white  border border-white"
+            <div
+              onClick={handleLogIn}
+              className=" bg-red-500 text-lg text-center py-4 rounded-xl outline-none"
             >
-              Sign In
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <main className="w-screen h-full md:h-screen lg:h-screen xl:h-full bg-gray-900 relative">
-        <section className=" xl:px-20 xl:py-16">
-          <div className="flex flex-col items-center pb-10 xl:flex-row xl:justify-around ">
-            <img
-              src="/image/logo_1.png"
-              alt="login_logo"
-              className="w-48 h-48 mt-6 md:hidden"
-            />
-            <img
-              src="../image/login.jpg"
-              className="hidden md:w-[600px] md:h-[460px] md:block md:pt-16 xl:w-1/2 object-cover xl:h-screen"
-              loading="lazy"
-            />
-            <div className="flex flex-col items-center">
-              <div className="flex-col space-y-6 w-full xl:py-24">
-                <h1 className="text-white pb-1 pt-6 md:pt-12 md:text-4xl text-3xl xl:pb-2 xl:pt-12 xl:text-4xl font-semibold text-center">
-                  Sign Up
-                </h1>
-                {error && (
-                  <div>
-                    <h1 className="text-white rounded-lg  bg-red-500 p-2">
-                      {error}
-                    </h1>
-                  </div>
-                )}
-                <div className="flex flex-col items-center flex-1 space-y-8">
-                  <div>
-                    <input
-                      placeholder="Email"
-                      required={true}
-                      value={signUpEmail}
-                      className="pl-2 w-full py-3 rounded-md focus:outline-none"
-                      type="Email"
-                      onChange={(e) => setSignUpEmail(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <input
-                      placeholder="Password"
-                      required={true}
-                      value={signUpPassword}
-                      className="pl-2 w-full py-3  rounded-md  focus:outline-none"
-                      type="Password"
-                      onChange={(e) => setSignUpPassword(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="pt-4 ">
-                    <Link
-                      className=" bg-red-500 py-3 pl-[74px] pr-[74px]  cursor-pointer hover:bg-red-700 rounded-xl text-center text-white  border border-white"
-                      onClick={handleSignUp}
-                      to={
-                        !signUpPassword || !signUpEmail || !newUser
-                          ? "/login"
-                          : "/"
-                      }
-                    >
-                      Sign Up
-                    </Link>
-
-                    <Outlet />
-                  </div>
-                </div>
-                <div className="flex items-center justify-center space-x-4 pt-12">
-                  <Link
-                    to={!user ? "/" : "/login"}
-                    onClick={signInGoogle}
-                    className="bg-gray-200 rounded-full p-2 "
-                  >
-                    <img src="../image/google.png" className="w-8 h-8" />
-                  </Link>
-                  <Link
-                    to={!user ? "/" : "login"}
-                    onClick={signInFacebook}
-                    className="bg-gray-200 rounded-full p-2 "
-                  >
-                    <img src="../image/facebook.png" className="w-8 h-8" />
-                  </Link>
-                </div>
-                <div className="flex items-center pt-5 justify-center space-x-3">
-                  <p className="text-md text-white">Already a member?</p>
-                  <button
-                    onClick={() => setShowSignIn(!showSignIn)}
-                    className="text-green-500 text-lg"
-                  >
-                    Sign In
-                  </button>
-                </div>
-              </div>
+              <button>Log in</button>
             </div>
           </div>
-        </section>
-      </main>
-    </>
+          <div className="flex items-center justify-center space-x-2 pt-2">
+            <h2 className="text-sm text-white text-opacity-80">
+              Don't have an account?
+            </h2>
+            <Link
+              to={"/signup"}
+              className="text-md font-bold text-white hover:text-red-600 "
+            >
+              Sign up
+            </Link>
+            <Outlet />
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
 
